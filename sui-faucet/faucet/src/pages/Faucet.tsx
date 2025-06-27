@@ -15,22 +15,22 @@ export function Faucet() {
     const [loading, setLoading] = useState(false);
     
     const { mutateAsync: signAndExecuteTransaction } = useSignAndExecuteTransaction({
-                execute: async ({ bytes, signature }) => {
-                    const result = await suiClient.executeTransactionBlock({
-                        transactionBlock: bytes,
-                        signature,
-                        options: {
-                            showRawEffects: true,
-                            showObjectChanges: true,
-                        },
-                    });
-                    // 반드시 필요한 값을 명시적으로 리턴
-                    return {
-                        digest: result.digest,
-                        objectChanges: result.objectChanges,
-                    };
-                },
-            });
+      execute: async ({ bytes, signature }) => {
+          const result = await suiClient.executeTransactionBlock({
+              transactionBlock: bytes,
+              signature,
+              options: {
+                  showRawEffects: true,
+                  showObjectChanges: true,
+              },
+          });
+          // 반드시 필요한 값을 명시적으로 리턴
+          return {
+              digest: result.digest,
+              objectChanges: result.objectChanges,
+          };
+      },
+    });
 
     const fetchFaucetInfo = async() => {
         try{
@@ -40,8 +40,9 @@ export function Faucet() {
             });
 
             const fields = (data?.content as any).fields;
-            setBalance(fields.balance.fields.value);
+            setBalance(fields.balance.fields.balance);
             setHistory(fields.history);
+
         } catch (err) {
             console.log("Faucet 정보 조회 실패: ", err);
         }
